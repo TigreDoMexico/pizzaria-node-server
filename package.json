@@ -1,0 +1,23 @@
+{
+  "name": "pizzaria-node-server",
+  "version": "0.0.1",
+  "description": "projeto de estudo para nodejs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TigreDoMexico/pizzaria-node-server.git"
+  },
+  "keywords": [
+    "node-server"
+  ],
+  "author": "David Tigre Moraes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TigreDoMexico/pizzaria-node-server/issues"
+  },
+  "homepage": "https://github.com/TigreDoMexico/pizzaria-node-server#readme"
+}
