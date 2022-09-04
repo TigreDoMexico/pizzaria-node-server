@@ -1,1 +1,1 @@
-alert('OLA')
+console.log("[PIZZARIA MODULE]")

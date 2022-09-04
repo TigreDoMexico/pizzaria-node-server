@@ -1,0 +1,24 @@
+/* #F9EEC9 #D3B786 #886839 #AF672D #E4B455 #770D15 #B4000F #58483A #90A74C #597718 */
+
+body {
+    background-color: #58483A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.font-default {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+    color: #E4B455;
+    font-size: 3rem;
+}
+
+.content {
+    border-radius: 8px;
+    padding: 20px 30px;
+    background-color: #E4B455;
+}
