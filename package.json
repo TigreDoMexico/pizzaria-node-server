@@ -4,7 +4,7 @@
   "description": "projeto de estudo para nodejs",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/TigreDoMexico/pizzaria-node-server/issues"
   },
-  "homepage": "https://github.com/TigreDoMexico/pizzaria-node-server#readme"
+  "homepage": "https://github.com/TigreDoMexico/pizzaria-node-server#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
 }
