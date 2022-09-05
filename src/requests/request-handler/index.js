@@ -1,5 +1,6 @@
 const header = require('../header-response')
 const { savePizzaDomain } = require('../../domain/PizzaDomain')
+const { getFileContent } = require('../static-file-manager')
 
 const handleGetRequest = async (req, res) => {
     let fileName = req.url.substring(1);
@@ -21,7 +22,7 @@ const handlePostRequest = async (req, res) => {
         header.setCors(res)
         res.end()
     } catch(ex) {
-        header.setError(res)
+        res.statusCode = 400
         res.end(ex)
     }
 }

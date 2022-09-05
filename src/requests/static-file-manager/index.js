@@ -5,7 +5,7 @@ let content = {}
 
 const getFileContent = async (fileName) => {
     if(!content[fileName]) {
-        content[fileName] = await fs.readFile(process.cwd() + "/src/public/" + fileName);
+        content[fileName] = await fs.readFile(process.cwd() + "/src/public/" + fileName, 'utf-8');
     }
 
     return content[fileName]
