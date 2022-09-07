@@ -1,21 +1,9 @@
 const http = require('http');
-const { getFileContent } = require('./static-file-manager')
-const header = require('./header-response')
+const header = require('./requests/header-response')
+const { handleGetRequest, handlePostRequest } = require('./requests/request-handler')
 
 const hostname = '127.0.0.1';
 const port = 3000;
-
-const handleGetRequest = async (req, res) => {
-    let fileName = req.url.substring(1);
-    if(!fileName) {
-        fileName = 'page.html'
-        header.setHtmlContent(res)
-    }
-
-    const fileContent = await getFileContent(fileName)
-    header.setSuccess(res)
-    res.end(fileContent)
-}
 
 const server = http.createServer(async (req, res) => {
     switch (req.method) {
@@ -23,8 +11,7 @@ const server = http.createServer(async (req, res) => {
             await handleGetRequest(req, res)
             break;
         case "POST":
-            header.setCors(res)
-            res.end()
+            await handlePostRequest(req, res)
             break;
         case "OPTIONS":
             header.setCors(res)

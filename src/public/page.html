@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Pizzaria Node Server</title>
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="stylesheet" href="app.css">
-    </head>
-    <body>
-        <h1 class="title font-default">Bem Vindo a Pizzaria Server</h1>
-        <div class="content font-default">
-            <h2>CARDÁPIO</h2>
+
+<head>
+    <title>Pizzaria Node Server</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="stylesheet" href="app.css">
+</head>
+
+<body>
+    <h1 class="title font-default">Bem Vindo a Pizzaria Server</h1>
+    <div class="content font-default">
+        <h2>MONTE SUA PIZZA</h2>
+        <div>
+            <label for="sabor-lbl">Sabor</label>
+            <input id="input-sabor" name="sabor-lbl" type="text">
+            <label for="ingredientes">Ingredientes</label>
+            <select id="select-ingr" name="ingr-lbl">
+                <option value="" selected>Escolha uma opção</option>
+                <option value="mussarela">Mussarela</option>
+                <option value="ovo">Ovo</option>
+            </select>
+            <button id="btn-montar">MONTAR</button>
         </div>
-    </body>
-    <script src="index.js"></script>
+        <p id="p-error"></p>
+    </div>
+</body>
+<script src="index.js"></script>
+
 </html>

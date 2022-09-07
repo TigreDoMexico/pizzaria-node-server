@@ -4,7 +4,7 @@ const setBadRequest = (res) => res.statusCode = 405
 
 const setHtmlContent = (res) => {
     setSuccess(res)
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
 }
 
 const setCors = (res) => {
