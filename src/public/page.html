@@ -8,19 +8,28 @@
 </head>
 
 <body>
-    <h1 class="title font-default">Bem Vindo a Pizzaria Server</h1>
+    <h1 class="welcome-message font-default">Pizzaria Server</h1>
     <div class="content font-default">
-        <h2>MONTE SUA PIZZA</h2>
-        <div>
-            <label for="sabor-lbl">Sabor</label>
-            <input id="input-sabor" name="sabor-lbl" type="text">
-            <label for="ingredientes">Ingredientes</label>
-            <select id="select-ingr" name="ingr-lbl">
-                <option value="" selected>Escolha uma opção</option>
-                <option value="mussarela">Mussarela</option>
-                <option value="ovo">Ovo</option>
-            </select>
-            <button id="btn-montar">MONTAR</button>
+        <div class="title">
+            <img src="/images/pizza.png" alt="Imagem de uma pizza"/>
+            <h2>MONTE A SUA PRÓPRIA PIZZA!</h2>
+            <img src="/images/pizza.png" style="transform: rotate(180deg)" alt="Imagem de uma pizza"/>
+        </div>
+        <div class="build-pizza">
+            <div class="build-sabor">
+                <label for="sabor-lbl">Sabor</label>
+                <input id="input-sabor" placeholder="Escreva um nome bem criativo" name="sabor-lbl" type="text">
+            </div>
+            <div class="build-ingredientes">
+                <label for="ingredientes">Ingredientes</label>
+                <select id="select-ingr" name="ingr-lbl">
+                    <option value="" selected>Escolha um ingrediente</option>
+                    <option value="1">Mussarela</option>
+                    <option value="2">Ovo</option>
+                </select>
+                <button id="btn-escolher-ingrediente">+</button>
+            </div>
+            <button id="btn-montar">MONTAR MINHA PIZZA!</button>
         </div>
         <p id="p-error"></p>
     </div>
