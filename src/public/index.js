@@ -5,7 +5,7 @@ const input_sabor = document.getElementById('input-sabor')
 const select_ingr = document.getElementById('select-ingr')
 const p_error = document.getElementById('p-error')
 
-const listaIngredientes = [{ id: 1, nome: 'Queijo Mussarela', preco: 15.00 }, { id: 2, nome: 'Ovo', preco: 2.00 }]
+let listaIngredientes = []
 let ingredientesEscolhidos = []
 
 btn_escolher_ingrediente.addEventListener('click', async () => {
@@ -51,7 +51,25 @@ const sendPizzaData = (data) => new Promise((resolve, reject) => {
         .catch((error) => reject(error))
 });
 
-window.addEventListener('load', () => {
+const getIngredientesList = () => new Promise((resolve, reject) => {
+    fetch('/api/ingredientes', { method: 'GET' })
+        .then(response => {
+            if (!response.ok) {
+                let err = new Error("HTTP status code: " + response.status)
+                err.response = response
+                err.status = response.status
+                throw err
+            }
+
+            resolve(response)
+        })
+        .catch((error) => reject(error))
+});
+
+window.addEventListener('load', async () => {
+    const response = await getIngredientesList()
+    listaIngredientes = await response.json()
+
     listaIngredientes.forEach(el => {
         const option = document.createElement('option')
         option.text = `${el.nome} (+ R$${el.preco})`
