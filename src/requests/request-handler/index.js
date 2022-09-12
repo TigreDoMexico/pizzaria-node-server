@@ -9,8 +9,17 @@ const handleGetRequest = async (req, res) => {
         header.setHtmlContent(res)
     }
 
-    const fileContent = await getFileContent(fileName)
-    header.setSuccess(res)
+    let fileContent = ''
+
+    if(fileName.startsWith("images")) {
+        fileContent = await getFileContent(fileName)
+        header.setImageContent(res)
+    }
+    else {
+        fileContent = await getFileContent(fileName, true)
+        header.setSuccess(res)
+    }
+
     res.end(fileContent)
 }
 
