@@ -1,4 +1,4 @@
-const { saveData } = require('../../repository/PizzaRepository')
+const { saveData, getIngredientes } = require('../../repository/PizzaRepository')
 const mapper = require('./mapper')
 
 const validateRequestData = (requestData) => {
@@ -16,6 +16,10 @@ const savePizzaDomain = (requestData) => {
     saveData(mapper(requestData))
 }
 
+const getIngredientesListDomain = () =>
+    getIngredientes()
+
 module.exports = {
+    getIngredientesListDomain,
     savePizzaDomain
 }
