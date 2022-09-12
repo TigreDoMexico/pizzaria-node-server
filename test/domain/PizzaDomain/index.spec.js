@@ -1,10 +1,10 @@
-const { savePizzaDomain } = require('../../../src/domain/PizzaDomain')
+const { savePizzaDomain, getIngredientesListDomain } = require('../../../src/domain/PizzaDomain')
 const mapper = require('../../../src/domain/PizzaDomain/mapper')
 const repository = require('../../../src/repository/PizzaRepository')
 
 jest.mock('../../../src/repository/PizzaRepository', () => {
   const originalModule = jest.requireActual('../../../src/repository/PizzaRepository');
-  return { __esModule: true, ...originalModule, saveData: jest.fn() };
+  return { __esModule: true, ...originalModule, saveData: jest.fn(), getIngredientes: jest.fn() };
 })
 
 jest.mock('../../../src/domain/PizzaDomain/mapper', () => jest.fn())
@@ -81,6 +81,16 @@ describe('DADO uma pizza vinda do front sem ingredientes', () => {
 
     it('NÃO DEVE chamar o mapper', () => {
       expect(mapper).not.toHaveBeenCalled();
+    })
+  })
+})
+
+describe('DADO uma chamada para obter os ingredientes', () => {
+  describe('QUANDO obter ingredientes', () => {
+    getIngredientesListDomain()
+
+    it('DEVE chamar o repositório para obter os ingredientes', () => {
+      expect(repository.getIngredientes).toHaveBeenCalled();
     })
   })
 })

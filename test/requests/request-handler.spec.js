@@ -7,7 +7,8 @@ jest.mock('../../src/requests/static-file-manager', () => ({
 }))
 
 jest.mock('../../src/domain/PizzaDomain', () => ({
-    savePizzaDomain: jest.fn()
+    savePizzaDomain: jest.fn(),
+    getIngredientesListDomain: jest.fn()
 }))
 
 describe('DADO uma requisicao GET vinda do front sem query e sem rota', () => {
@@ -25,7 +26,7 @@ describe('DADO uma requisicao GET vinda do front sem query e sem rota', () => {
 
         it('DEVE buscar o conteudo do arquivo page.html', async () => {
             await handleGetRequest(req, res)
-            expect(fileContent.getFileContent).toHaveBeenCalledWith('page.html')
+            expect(fileContent.getFileContent).toHaveBeenCalledWith('page.html', true)
         })
 
         it('DEVE salvar no response o conteudo da page.html', async () => {
@@ -60,11 +61,9 @@ describe('DADO uma requisicao GET vinda do front contendo na rota o nome de um a
             fileContent.getFileContent.mockImplementation(() => conteudoArquivo);
         })
 
-        const promiseGet = handleGetRequest(req, res)
-
         it('DEVE buscar o conteudo do arquivo', async () => {
             await handleGetRequest(req, res)
-            expect(fileContent.getFileContent).toHaveBeenCalledWith(nomeArquivo)
+            expect(fileContent.getFileContent).toHaveBeenCalledWith(nomeArquivo, true)
         })
 
         it('DEVE salvar no response o conteudo do arquivo mencionado', async () => {
@@ -83,12 +82,83 @@ describe('DADO uma requisicao GET vinda do front contendo na rota o nome de um a
     })
 })
 
+describe('DADO uma requisicao GET vinda do front contendo na rota de uma imagem PNG', () => {
+    const nomeArquivo = 'images/teste.png'
+    const req = { url: '/' + nomeArquivo };
+    const res = {
+        setHeader: jest.fn(),
+        end: jest.fn()
+    };
+
+    describe('QUANDO executar o Handler GET', () => {
+        const conteudoArquivo = "arquivoPNG"
+        beforeEach(() => {
+            fileContent.getFileContent.mockImplementation(() => conteudoArquivo);
+        })
+
+        it('DEVE buscar o conteudo da imagem', async () => {
+            await handleGetRequest(req, res)
+            expect(fileContent.getFileContent).toHaveBeenCalledWith(nomeArquivo)
+        })
+
+        it('DEVE salvar no response o conteudo da imagem mencionada', async () => {
+            await handleGetRequest(req, res)
+            expect(res.end).toHaveBeenCalledWith(conteudoArquivo)
+        })
+
+        it('DEVE configurar o header do response da Imagem de forma correta', async () => {
+            await handleGetRequest(req, res)
+            expect(res.statusCode).toBe(200)
+            expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'image/png')
+        })
+
+        afterAll(() => {
+            fileContent.getFileContent.mockClear()
+        })
+    })
+})
+
+describe('DADO uma requisicao GET vinda do front para a API Ingredientes', () => {
+    const req = { url: '/api/ingredientes' };
+    const res = {
+        setHeader: jest.fn(),
+        end: jest.fn()
+    };
+
+    describe('QUANDO executar o Handler GET', () => {
+        const ingredientesList = [{ nome: 'ingredienteA' }, { nome: 'ingredienteB' }]
+        beforeEach(() => {
+            domain.getIngredientesListDomain.mockImplementation(() => ingredientesList);
+        })
+
+        it('DEVE obter os ingredientes do DOMAIN', async () => {
+            await handleGetRequest(req, res)
+            expect(domain.getIngredientesListDomain).toHaveBeenCalledTimes(1)
+        })
+
+        it('DEVE salvar no response o conteudo do DOMAIN como JSON Stringify', async () => {
+            await handleGetRequest(req, res)
+            expect(res.end).toHaveBeenCalledWith(JSON.stringify(ingredientesList))
+        })
+
+        it('DEVE configurar o header do response da API de forma correta', async () => {
+            await handleGetRequest(req, res)
+            expect(res.statusCode).toBe(200)
+            expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'application/json')
+        })
+
+        afterAll(() => {
+            domain.getIngredientesListDomain.mockClear()
+        })
+    })
+})
+
 describe('DADO uma requisicao POST vinda do front sem rota e com body correto', () => {
     const dadosRequisicao = { sabor: "Mussarela" }
     const bodyRequisicao = JSON.stringify(dadosRequisicao)
     const req = {
         url: '/',
-        on: jest.fn((data, callback) => callback(bodyRequisicao)),
+        on: jest.fn((_, callback) => callback(bodyRequisicao)),
     };
     const res = {
         setHeader: jest.fn(),
@@ -129,7 +199,7 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body incorreto'
     const bodyRequisicao = JSON.stringify(dadosRequisicao)
     const req = {
         url: '/',
-        on: jest.fn((data, callback) => callback(bodyRequisicao)),
+        on: jest.fn((_, callback) => callback(bodyRequisicao)),
     };
     const res = {
         setHeader: jest.fn(),
