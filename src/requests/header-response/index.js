@@ -12,6 +12,11 @@ const setImageContent = (res) => {
     res.setHeader('Content-Type', 'image/png');
 }
 
+const setJsonContent = (res) => {
+    setSuccess(res)
+    res.setHeader('Content-Type', 'application/json');
+}
+
 const setCors = (res) => {
     setSuccess(res)
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,5 +30,6 @@ module.exports = {
     setBadRequest,
     setCors,
     setHtmlContent,
-    setImageContent
+    setImageContent,
+    setJsonContent
 }
