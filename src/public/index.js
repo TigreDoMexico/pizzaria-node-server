@@ -10,12 +10,14 @@ let ingredientesEscolhidos = []
 
 btn_escolher_ingrediente.addEventListener('click', async () => {
     const ingrediente = listaIngredientes.find((el) => el.id == select_ingr.value);
-    const ingredienteJaEscolhido = ingredientesEscolhidos.some((el) => el.id === ingrediente.id)
+    const ingredienteJaEscolhido = ingredientesEscolhidos.some((el) => el.id === ingrediente?.id)
 
     if(ingrediente && !ingredienteJaEscolhido) {
         ingredientesEscolhidos.push(ingrediente)
         console.log(ingredientesEscolhidos)
     }
+
+    select_ingr.value = ''
 })
 
 btn_montar.addEventListener('click', async () => {
@@ -48,3 +50,12 @@ const sendPizzaData = (data) => new Promise((resolve, reject) => {
         })
         .catch((error) => reject(error))
 });
+
+window.addEventListener('load', () => {
+    listaIngredientes.forEach(el => {
+        const option = document.createElement('option')
+        option.text = `${el.nome} (+ R$${el.preco})`
+        option.value = el.id;
+        select_ingr.add(option)
+    })
+}, false);
