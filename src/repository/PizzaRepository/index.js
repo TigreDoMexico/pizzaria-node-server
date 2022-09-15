@@ -6,9 +6,12 @@ const saveData = (data) => {
     tempData.push(data)
 }
 
+const getAllPizzas = () => tempData
+
 const getIngredientes = () => ingredientesData
 
 module.exports = {
     saveData,
+    getAllPizzas,
     getIngredientes
 }

@@ -1,8 +1,8 @@
-const { handleGetRequest, handlePostRequest } = require('../../src/requests/request-handler')
-const fileContent = require('../../src/requests/static-file-manager')
+const { handleGetRequest, handlePostRequest } = require('../../src/requests/RequestHandler')
+const fileContent = require('../../src/requests/StaticFileManager')
 const domain = require('../../src/domain/PizzaDomain')
 
-jest.mock('../../src/requests/static-file-manager', () => ({
+jest.mock('../../src/requests/StaticFileManager', () => ({
     getFileContent: jest.fn()
 }))
 

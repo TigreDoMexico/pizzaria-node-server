@@ -1,6 +1,6 @@
 const http = require('http');
 const header = require('./requests/header-response')
-const { handleGetRequest, handlePostRequest } = require('./requests/request-handler')
+const { handleGetRequest, handlePostRequest } = require('./requests/RequestHandler')
 
 const hostname = '127.0.0.1';
 const port = 3000;

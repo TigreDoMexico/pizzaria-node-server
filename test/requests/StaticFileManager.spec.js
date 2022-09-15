@@ -1,4 +1,4 @@
-const { getFileContent } = require('../../src/requests/static-file-manager')
+const { getFileContent } = require('../../src/requests/StaticFileManager')
 const fs = require('fs').promises
 
 jest.mock("fs", () => ({
