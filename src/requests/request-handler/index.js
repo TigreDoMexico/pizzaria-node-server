@@ -1,7 +1,7 @@
 const header = require('../header-response')
 const { savePizzaDomain, getIngredientesListDomain } = require('../../domain/PizzaDomain')
 const { getFileContent } = require('../static-file-manager')
-const { generateAuthToken } = require('../../auth')
+const { generateAuthToken, validateAuthToken } = require('../../auth')
 
 const handleGetRequest = async (req, res) => {
     if (req.url.startsWith('/api/')) {
@@ -39,13 +39,15 @@ const handlePostRequest = async (req, res) => {
             break;
         case '':
             try {
+                await validateAuthToken(data.token)
+                
                 savePizzaDomain(data)
         
                 header.setCors(res)
                 res.end()
             } catch (ex) {
                 res.statusCode = 400
-                res.end(ex)
+                res.end(JSON.stringify(ex))
             }
             break;
         default:

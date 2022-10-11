@@ -15,14 +15,14 @@ const generateAuthToken = (bodyData) => {
   return { auth: false, token: null };
 };
 
-const validateAuthToken = (token) => {
-  jwt.verify(token, process.env.SECRET, function (err, decoded) {
-    if (err)
-      return { auth: false, message: "Falha para autenticar" }
+const validateAuthToken = (token) =>
+  new Promise((res, rej) => {
+    jwt.verify(token, process.env.SECRET, function (err, decoded) {
+      if (err) rej({ auth: false, message: "Falha para autenticar" });
 
-    return { auth: true, id: decoded.id }
+      res({ auth: true, id: decoded.id });
+    });
   });
-};
 
 module.exports = {
   generateAuthToken,
