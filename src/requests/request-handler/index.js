@@ -1,10 +1,11 @@
 const header = require('../header-response')
 const { savePizzaDomain, getIngredientesListDomain } = require('../../domain/PizzaDomain')
 const { getFileContent } = require('../static-file-manager')
+const { generateAuthToken } = require('../../auth')
 
 const handleGetRequest = async (req, res) => {
     if (req.url.startsWith('/api/')) {
-        var controller = req.url.split('/')[2].trim()
+        const controller = req.url.split('/')[2].trim()
 
         switch(controller) {
             case 'ingredientes':
@@ -24,14 +25,33 @@ const handleGetRequest = async (req, res) => {
 
 const handlePostRequest = async (req, res) => {
     const data = await getBodyJSONResponse(req)
-    try {
-        savePizzaDomain(data)
+    const controller = req.url.split('/')[1].trim()
 
-        header.setCors(res)
-        res.end()
-    } catch (ex) {
-        res.statusCode = 400
-        res.end(ex)
+    switch(controller) {
+        case 'login':
+            const result = generateAuthToken(data)
+            if(result.auth)
+                header.setSuccess(res)    
+            else
+                header.setBadRequest(res)
+
+            res.end(JSON.stringify(result))
+            break;
+        case '':
+            try {
+                savePizzaDomain(data)
+        
+                header.setCors(res)
+                res.end()
+            } catch (ex) {
+                res.statusCode = 400
+                res.end(ex)
+            }
+            break;
+        default:
+            header.setBadRequest(res)
+            res.end()
+            break;
     }
 }
 
