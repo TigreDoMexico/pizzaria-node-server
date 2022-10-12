@@ -19,7 +19,7 @@ const validateAuthToken = (token) =>
   new Promise((res, rej) => {
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
       if (err) rej({ auth: false, message: "Falha para autenticar" });
-
+      
       res({ auth: true, id: decoded.id });
     });
   });

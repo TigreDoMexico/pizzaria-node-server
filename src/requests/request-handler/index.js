@@ -1,7 +1,8 @@
 const header = require('../header-response')
 const { savePizzaDomain, getIngredientesListDomain } = require('../../domain/PizzaDomain')
 const { getFileContent } = require('../static-file-manager')
-const { generateAuthToken, validateAuthToken } = require('../../auth')
+const { validateAuthToken } = require('../../auth')
+const { onLoginHandler } = require('./post')
 
 const handleGetRequest = async (req, res) => {
     if (req.url.startsWith('/api/')) {
@@ -29,13 +30,7 @@ const handlePostRequest = async (req, res) => {
 
     switch(controller) {
         case 'login':
-            const result = generateAuthToken(data)
-            if(result.auth)
-                header.setSuccess(res)    
-            else
-                header.setBadRequest(res)
-
-            res.end(JSON.stringify(result))
+            onLoginHandler(data, req, res)
             break;
         case '':
             try {

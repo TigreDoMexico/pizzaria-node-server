@@ -1,9 +1,14 @@
 const { handleGetRequest, handlePostRequest } = require('../../src/requests/request-handler')
 const fileContent = require('../../src/requests/static-file-manager')
 const domain = require('../../src/domain/PizzaDomain')
+const auth = require('../../src/auth')
 
 jest.mock('../../src/requests/static-file-manager', () => ({
     getFileContent: jest.fn()
+}))
+
+jest.mock('../../src/auth', () => ({
+    validateAuthToken: jest.fn()
 }))
 
 jest.mock('../../src/domain/PizzaDomain', () => ({
@@ -168,6 +173,7 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body correto', 
     describe('QUANDO executar o Handler POST', () => {
         beforeEach(() => {
             domain.savePizzaDomain.mockImplementation(() => true);
+            auth.validateAuthToken.mockImplementation(() => Promise.resolve(true));
         })
 
         it('DEVE enviar os dados do body para o domain', async () => {
@@ -190,6 +196,7 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body correto', 
 
         afterAll(() => {
             domain.savePizzaDomain.mockClear()
+            auth.validateAuthToken.mockClear()
         })
     })
 })
@@ -210,6 +217,7 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body incorreto'
         const erroDomain = 'ERRO DOMAIN'
         beforeEach(() => {
             domain.savePizzaDomain.mockImplementation(() => { throw erroDomain });
+            auth.validateAuthToken.mockImplementation(() => Promise.resolve(true));
         })
 
         it('DEVE configurar o header como 400', async () => {
@@ -219,11 +227,12 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body incorreto'
 
         it('DEVE salvar no response o erro enviado pelo Domain', async () => {
             await handlePostRequest(req, res)
-            expect(res.end).toHaveBeenCalledWith(erroDomain)
+            expect(res.end).toHaveBeenCalledWith(JSON.stringify(erroDomain))
         })
 
         afterAll(() => {
             domain.savePizzaDomain.mockClear()
+            auth.validateAuthToken.mockClear()
         })
     })
 })
