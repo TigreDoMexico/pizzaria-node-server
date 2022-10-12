@@ -163,6 +163,7 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body correto', 
     const bodyRequisicao = JSON.stringify(dadosRequisicao)
     const req = {
         url: '/',
+        headers: { authorization: "Bearer TOKEN" },
         on: jest.fn((_, callback) => callback(bodyRequisicao)),
     };
     const res = {
@@ -173,7 +174,7 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body correto', 
     describe('QUANDO executar o Handler POST', () => {
         beforeEach(() => {
             domain.savePizzaDomain.mockImplementation(() => true);
-            auth.validateAuthToken.mockImplementation(() => Promise.resolve(true));
+            auth.validateAuthToken.mockImplementation(() => ({ auth: true }));
         })
 
         it('DEVE enviar os dados do body para o domain', async () => {
@@ -206,6 +207,7 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body incorreto'
     const bodyRequisicao = JSON.stringify(dadosRequisicao)
     const req = {
         url: '/',
+        headers: { authorization: "Bearer TOKEN" },
         on: jest.fn((_, callback) => callback(bodyRequisicao)),
     };
     const res = {
@@ -217,7 +219,7 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body incorreto'
         const erroDomain = 'ERRO DOMAIN'
         beforeEach(() => {
             domain.savePizzaDomain.mockImplementation(() => { throw erroDomain });
-            auth.validateAuthToken.mockImplementation(() => Promise.resolve(true));
+            auth.validateAuthToken.mockImplementation(() => ({ auth: true }));
         })
 
         it('DEVE configurar o header como 400', async () => {
@@ -240,6 +242,7 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body incorreto'
 describe('DADO uma requisicao POST vinda do front com uma rota inexistente', () => {
     const req = {
         url: '/rota_inexistente',
+        headers: { authorization: "Bearer TOKEN" },
     };
     const res = {
         setHeader: jest.fn(),
@@ -247,6 +250,10 @@ describe('DADO uma requisicao POST vinda do front com uma rota inexistente', () 
     };
 
     describe('QUANDO executar o Handler POST', () => {
+        beforeEach(() => {
+            auth.validateAuthToken.mockImplementation(() => ({ auth: true }));
+        })
+
         it('DEVE configurar o header como BadRequest', async () => {
             await handlePostRequest(req, res)    
             expect(res.statusCode).toBe(405)
@@ -255,6 +262,33 @@ describe('DADO uma requisicao POST vinda do front com uma rota inexistente', () 
         it('DEVE chamar o response.end sem passar nada', async () => {
             await handlePostRequest(req, res)
             expect(res.end).toHaveBeenCalledWith()
+        })
+    })
+})
+
+describe('DADO uma requisicao POST vinda do front com o Token de Autenticação inválido', () => {
+    const req = {
+        url: '/',
+        headers: { authorization: "Bearer TOKEN_INVALIDO" },
+    };
+    const res = {
+        setHeader: jest.fn(),
+        end: jest.fn()
+    };
+
+    describe('QUANDO executar o Handler POST', () => {
+        beforeEach(() => {
+            auth.validateAuthToken.mockImplementation(() => ({ auth: false }));
+        })
+
+        it('DEVE configurar o header como Unauthorized', async () => {
+            await handlePostRequest(req, res)    
+            expect(res.statusCode).toBe(401)
+        })
+
+        it('DEVE chamar o response.end', async () => {
+            await handlePostRequest(req, res)
+            expect(res.end).toHaveBeenCalled()
         })
     })
 })
