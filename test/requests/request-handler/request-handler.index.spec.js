@@ -1,17 +1,17 @@
-const { handleGetRequest, handlePostRequest } = require('../../src/requests/request-handler')
-const fileContent = require('../../src/requests/static-file-manager')
-const domain = require('../../src/domain/PizzaDomain')
-const auth = require('../../src/auth')
+const { handleGetRequest, handlePostRequest } = require('../../../src/requests/request-handler')
+const fileContent = require('../../../src/requests/static-file-manager')
+const domain = require('../../../src/domain/PizzaDomain')
+const auth = require('../../../src/auth')
 
-jest.mock('../../src/requests/static-file-manager', () => ({
+jest.mock('../../../src/requests/static-file-manager', () => ({
     getFileContent: jest.fn()
 }))
 
-jest.mock('../../src/auth', () => ({
+jest.mock('../../../src/auth', () => ({
     validateAuthToken: jest.fn()
 }))
 
-jest.mock('../../src/domain/PizzaDomain', () => ({
+jest.mock('../../../src/domain/PizzaDomain', () => ({
     savePizzaDomain: jest.fn(),
     getIngredientesListDomain: jest.fn()
 }))

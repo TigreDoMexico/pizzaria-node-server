@@ -5,7 +5,7 @@ const onLoginHandler = (data, req, res) => {
   const result = generateAuthToken(data);
 
   if (result.auth) header.setSuccess(res);
-  else header.setBadRequest(res);
+  else header.setUnauthorized(res);
 
   res.end(JSON.stringify(result));
 };

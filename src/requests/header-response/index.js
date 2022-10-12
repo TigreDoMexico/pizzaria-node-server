@@ -1,6 +1,7 @@
 const setSuccess = (res) => res.statusCode = 200
 const setError = (res) => res.statusCode = 500
 const setBadRequest = (res) => res.statusCode = 405
+const setUnauthorized = (res) => res.statusCode = 401
 
 const setHtmlContent = (res) => {
     setSuccess(res)
@@ -28,6 +29,7 @@ module.exports = {
     setSuccess,
     setError,
     setBadRequest,
+    setUnauthorized,
     setCors,
     setHtmlContent,
     setImageContent,
