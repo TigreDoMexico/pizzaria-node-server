@@ -124,7 +124,10 @@ describe('DADO uma requisicao GET vinda do front contendo na rota de uma imagem 
 })
 
 describe('DADO uma requisicao GET vinda do front para a API Ingredientes', () => {
-    const req = { url: '/api/ingredientes' };
+    const req = {
+        url: '/api/ingredientes',
+        headers: { authorization: "Bearer TOKEN" },
+    };
     const res = {
         setHeader: jest.fn(),
         end: jest.fn()
@@ -134,6 +137,7 @@ describe('DADO uma requisicao GET vinda do front para a API Ingredientes', () =>
         const ingredientesList = [{ nome: 'ingredienteA' }, { nome: 'ingredienteB' }]
         beforeEach(() => {
             domain.getIngredientesListDomain.mockImplementation(() => ingredientesList);
+            auth.validateAuthToken.mockImplementation(() => ({ auth: true }));
         })
 
         it('DEVE obter os ingredientes do DOMAIN', async () => {
@@ -154,6 +158,38 @@ describe('DADO uma requisicao GET vinda do front para a API Ingredientes', () =>
 
         afterAll(() => {
             domain.getIngredientesListDomain.mockClear()
+            auth.validateAuthToken.mockClear()
+        })
+    })
+})
+
+describe('DADO uma requisicao GET vinda do front para a API, mas com Token de Autorização Inválido', () => {
+    const req = {
+        url: '/api/ingredientes',
+        headers: { authorization: "Bearer TOKEN_INVALIDO" },
+    };
+    const res = {
+        setHeader: jest.fn(),
+        end: jest.fn()
+    };
+
+    describe('QUANDO executar o Handler GET', () => {
+        beforeEach(() => {
+            auth.validateAuthToken.mockImplementation(() => ({ auth: false }));
+        })
+
+        it('DEVE configurar o header como Unauthorized', async () => {
+            await handleGetRequest(req, res)    
+            expect(res.statusCode).toBe(401)
+        })
+
+        it('DEVE chamar o response.end', async () => {
+            await handleGetRequest(req, res)
+            expect(res.end).toHaveBeenCalled()
+        })
+
+        afterAll(() => {
+            auth.validateAuthToken.mockClear()
         })
     })
 })
@@ -263,6 +299,10 @@ describe('DADO uma requisicao POST vinda do front com uma rota inexistente', () 
             await handlePostRequest(req, res)
             expect(res.end).toHaveBeenCalledWith()
         })
+
+        afterAll(() => {
+            auth.validateAuthToken.mockClear()
+        })
     })
 })
 
@@ -289,6 +329,10 @@ describe('DADO uma requisicao POST vinda do front com o Token de Autenticação 
         it('DEVE chamar o response.end', async () => {
             await handlePostRequest(req, res)
             expect(res.end).toHaveBeenCalled()
+        })
+
+        afterAll(() => {
+            auth.validateAuthToken.mockClear()
         })
     })
 })

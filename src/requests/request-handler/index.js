@@ -10,17 +10,25 @@ const { onLoginHandler } = require("./post");
 const handleGetRequest = async (req, res) => {
   if (req.url.startsWith("/api/")) {
     const controller = req.url.split("/")[2].trim();
+    
+    const token = req.headers?.authorization;    
+    const userAuthorized = validateAuthToken(token);
 
-    switch (controller) {
-      case "ingredientes":
-        const ingredientes = getIngredientesListDomain();
-        header.setJsonContent(res);
-        res.end(JSON.stringify(ingredientes));
-        break;
-      default:
-        header.setBadRequest(res);
-        res.end();
-        break;
+    if (!userAuthorized?.auth) {
+      header.setUnauthorized(res);
+      res.end(JSON.stringify(userAuthorized));
+    } else {
+      switch (controller) {
+        case "ingredientes":
+          const ingredientes = getIngredientesListDomain();
+          header.setJsonContent(res);
+          res.end(JSON.stringify(ingredientes));
+          break;
+        default:
+          header.setBadRequest(res);
+          res.end();
+          break;
+      }
     }
   } else {
     await handleFileContent(req, res);
@@ -29,17 +37,17 @@ const handleGetRequest = async (req, res) => {
 
 const handlePostRequest = async (req, res) => {
   const controller = req.url.split("/")[1].trim();
-  const token = req.headers.authorization;
+  const token = req.headers?.authorization;
 
   if (controller === "login") {
     let data = await getBodyJSONResponse(req);
     onLoginHandler(data, req, res);
   } else {
-    var userAuthorizes = validateAuthToken(token)
+    var userAuthorized = validateAuthToken(token);
 
-    if (!userAuthorizes?.auth) {
-        header.setUnauthorized(res);
-        res.end(JSON.stringify(userAuthorizes));
+    if (!userAuthorized?.auth) {
+      header.setUnauthorized(res);
+      res.end(JSON.stringify(userAuthorized));
     } else {
       switch (controller) {
         case "":
