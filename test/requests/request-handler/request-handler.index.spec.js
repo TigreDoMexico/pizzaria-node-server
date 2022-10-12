@@ -236,3 +236,25 @@ describe('DADO uma requisicao POST vinda do front sem rota e com body incorreto'
         })
     })
 })
+
+describe('DADO uma requisicao POST vinda do front com uma rota inexistente', () => {
+    const req = {
+        url: '/rota_inexistente',
+    };
+    const res = {
+        setHeader: jest.fn(),
+        end: jest.fn()
+    };
+
+    describe('QUANDO executar o Handler POST', () => {
+        it('DEVE configurar o header como BadRequest', async () => {
+            await handlePostRequest(req, res)    
+            expect(res.statusCode).toBe(405)
+        })
+
+        it('DEVE chamar o response.end sem passar nada', async () => {
+            await handlePostRequest(req, res)
+            expect(res.end).toHaveBeenCalledWith()
+        })
+    })
+})

@@ -25,15 +25,15 @@ const handleGetRequest = async (req, res) => {
 }
 
 const handlePostRequest = async (req, res) => {
-    const data = await getBodyJSONResponse(req)
     const controller = req.url.split('/')[1].trim()
-
     switch(controller) {
         case 'login':
+            let data = await getBodyJSONResponse(req)
             onLoginHandler(data, req, res)
             break;
         case '':
             try {
+                let data = await getBodyJSONResponse(req)
                 await validateAuthToken(data.token)
                 
                 savePizzaDomain(data)
